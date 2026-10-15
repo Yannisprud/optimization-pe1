@@ -18,15 +18,15 @@ export default function Carousel() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-4xl px-6 py-8">
-      <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-xl bg-gray-200">
+    <section className="mx-auto w-full max-w-2xl px-6 py-8">
+      <div className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-xl bg-gray-200">
         <img
           src={images[current]}
           alt={`Photography ${current + 1}`}
           width="1200"
           height="800"
           fetchPriority={current === 0 ? "high" : "auto"}
-          className="mx-auto aspect-[3/2] w-full max-w-md object-cover"
+          className="mx-auto aspect-2/2 w-full max-w-2xl object-cover"
         />
 
         <button
