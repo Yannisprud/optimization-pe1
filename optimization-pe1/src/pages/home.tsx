@@ -1,7 +1,9 @@
 import NavBar from "@/components/navbar";
 import Carousel from "@/components/carousel";
+import PhotoCollection from "@/components/photoCollection";
 
 export default function Home() {
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900">
       <header className="sticky top-0 z-50 bg-amber-700 text-white shadow-sm">
@@ -23,9 +25,7 @@ export default function Home() {
           className="h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
         />
         <section className="mt-8 w-full max-w-4xl">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-xl">
-            The beauty of moving water
-          </h1>
+         
 
           <p className="mt-3 text-base leading-7 text-stone-600">
             <span className="font-semibold text-stone-800">
@@ -43,6 +43,7 @@ export default function Home() {
           <div className="mx-auto mb-2 max-w-4xl px-6">
             </div>
         <Carousel />
+        <PhotoCollection />
         </section>
       </main>
     </div>
