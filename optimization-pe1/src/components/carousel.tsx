@@ -1,54 +1,52 @@
 import { useState } from "react";
 
-const images = [
-  "/images/D71_6964.JPG",
-  "/images/D71_6983.JPG",
-  "/images/D71_7063.JPG",
-];
+type Photo = { src: string; name: string };
 
-export default function Carousel() {
+type CarouselProps = {
+  photos: Photo[];
+};
+
+
+export default function Carousel({ photos }: CarouselProps) {
   const [current, setCurrent] = useState(0);
 
+  if (photos.length === 0) return null;
+
   const previous = () => {
-    setCurrent((current - 1 + images.length) % images.length);
+    setCurrent((current - 1 + photos.length) % photos.length);
   };
 
   const next = () => {
-    setCurrent((current + 1) % images.length);
+    setCurrent((current + 1) % photos.length);
   };
 
   return (
-    <section className="mx-auto w-full max-w-2xl px-6 py-8">
-      <div className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-xl bg-gray-200">
+    <section className="mx-auto w-full max-w-4xl px-6 py-8">
+      <div className="relative overflow-hidden rounded-xl bg-gray-200">
         <img
-          src={images[current]}
-          alt={`Photography ${current + 1}`}
+          src={photos[current].src}
+          alt={photos[current].name}
           width="1200"
           height="800"
-          fetchPriority={current === 0 ? "high" : "auto"}
-          className="mx-auto aspect-2/2 w-full max-w-2xl object-cover"
+          className="aspect-[3/2] w-full object-cover"
         />
 
         <button
           onClick={previous}
           aria-label="Previous photo"
-          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 px-4 py-2 text-white hover:bg-black/80"
+          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 px-4 py-2 text-white"
         >
-          &#8592;
+          ←
         </button>
 
         <button
           onClick={next}
           aria-label="Next photo"
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 px-4 py-2 text-white hover:bg-black/80"
+          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 px-4 py-2 text-white"
         >
-          &#8594;
+          →
         </button>
       </div>
-
-      <p className="mt-3 text-center text-gray-600">
-        Photo {current + 1} of {images.length}
-      </p>
     </section>
   );
 }
