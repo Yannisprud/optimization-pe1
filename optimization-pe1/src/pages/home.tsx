@@ -1,7 +1,19 @@
+import { useEffect, useState } from "react";
 import NavBar from "@/components/navbar";
 import PhotoCollection from "@/components/photoCollection";
 
 export default function Home() {
+
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowBanner(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900">
       <header className="sticky top-0 z-50 bg-amber-700 text-white shadow-sm">
@@ -11,9 +23,17 @@ export default function Home() {
         </div>
       </header>
       <main className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-10 sm:py-14">
-        <p className="text-3xl mb-9 font-semibold uppercase tracking-[0.2em] text-amber-700">
-              The gallery
+        {showBanner && (
+          <div className="mb-6 w-full rounded-xl bg-amber-100 p-4 text-center text-amber-900 shadow-sm">
+            <p className="font-semibold">Welcome to Fotograph!</p>
+            <p className="text-sm">
+              Explore my gallery and discover the photographs.
             </p>
+          </div>
+        )}
+        <p className="text-3xl mb-9 font-semibold uppercase tracking-[0.2em] text-amber-700">
+          The gallery
+        </p>
         <img
           src="/images/D71_6978.JPG"
           alt="River"
@@ -38,7 +58,7 @@ export default function Home() {
 
         <section className="w-full">
           <div className="mx-auto mb-2 max-w-4xl px-6">
-            </div>
+          </div>
           <PhotoCollection />
         </section>
       </main>
