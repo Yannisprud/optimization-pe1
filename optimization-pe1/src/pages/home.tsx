@@ -52,6 +52,11 @@ export default function Home() {
           height="400"
           className="h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
         />
+        <img
+          src="/images/D71_7063.JPG"
+          alt="River"
+          className="h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
+        />
         <section className="mt-8 w-full max-w-4xl">
 
           <p className="mt-3 text-base leading-7 text-stone-600">
