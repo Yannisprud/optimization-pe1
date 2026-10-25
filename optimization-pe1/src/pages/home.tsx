@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import NavBar from "@/components/navbar";
-import PhotoCollection from "@/components/photoCollection";
+
+const PhotoCollection = lazy(
+  () => import("@/components/photoCollection")
+);
 
 export default function Home() {
+
+  //delayed banner
 
   const [showBanner, setShowBanner] = useState(false);
 
@@ -10,9 +15,12 @@ export default function Home() {
     const timer = setTimeout(() => {
       setShowBanner(true);
     }, 2000);
+    //;
 
     return () => clearTimeout(timer);
   }, []);
+
+  const [showCollection, setShowCollection] = useState(false);
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900">
@@ -23,6 +31,7 @@ export default function Home() {
         </div>
       </header>
       <main className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-10 sm:py-14">
+        {/*delayed banner*/}
         {showBanner && (
           <div className="mb-6 w-full rounded-xl bg-amber-100 p-4 text-center text-amber-900 shadow-sm">
             <p className="font-semibold">Welcome to Fotograph!</p>
@@ -31,6 +40,7 @@ export default function Home() {
             </p>
           </div>
         )}
+        {/**/}
         <p className="text-3xl mb-9 font-semibold uppercase tracking-[0.2em] text-amber-700">
           The gallery
         </p>
@@ -59,7 +69,19 @@ export default function Home() {
         <section className="w-full">
           <div className="mx-auto mb-2 max-w-4xl px-6">
           </div>
-          <PhotoCollection />
+          <button
+            type="button"
+            onClick={() => setShowCollection(true)}
+            className="rounded-lg bg-amber-700 px-5 py-3 text-white hover:bg-amber-800"
+          >
+            Open photo collection
+          </button>
+
+          {showCollection && (
+            <Suspense fallback={<p>Loading photo collection...</p>}>
+              <PhotoCollection />
+            </Suspense>
+          )}
         </section>
       </main>
     </div>
