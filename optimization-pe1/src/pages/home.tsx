@@ -51,11 +51,13 @@ export default function Home() {
           fetchPriority="high"
           width="600"
           height="400"
-          className="h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
+          className="mb-4 h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
         />
         <img
           src="/images/D71_7063.JPG"
-          alt="River"
+          alt="Bird"
+          width="600"
+          height="400"
           className="h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
         />
         <section className="mt-8 w-full max-w-4xl">
