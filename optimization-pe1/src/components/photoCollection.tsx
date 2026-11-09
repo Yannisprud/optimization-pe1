@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Carousel from "./carousel";
+import PhotoCard from "@/Cards/PhotoCard";
 
 type Photo = {
     src: string;
@@ -14,6 +15,7 @@ export default function PhotoCollection() {
         { src: "/images/D71_7063.JPG", name: "D71_7063.JPG" },
     ]);
 
+
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const files = Array.from(event.target.files || []);
 
@@ -27,10 +29,9 @@ export default function PhotoCollection() {
 
     }
 
-    function removePhoto(src: string) {
+    const removePhoto = useCallback((src: string) => {
         setPhotos((prev) => prev.filter((photo) => photo.src !== src));
-    }
-
+    }, []);
     return (
         <>
             <Carousel photos={photos} />
@@ -73,32 +74,11 @@ export default function PhotoCollection() {
                     ) : (
                         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {photos.map((photo) => (
-                                <li
+                                <PhotoCard
                                     key={photo.src}
-                                    className="group flex items-center gap-3 rounded-xl border border-stone-200 p-3 transition hover:border-amber-400 hover:shadow-sm"
-                                >
-                                    <img
-                                        src={photo.src}
-                                        alt={photo.name}
-                                        width="80"
-                                        height="80"
-                                        loading="lazy"
-                                        className="h-16 w-16 shrink-0 rounded-lg object-cover"
-                                    />
-
-                                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-stone-700">
-                                        {photo.name}
-                                    </span>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => removePhoto(photo.src)}
-                                        aria-label={`Remove ${photo.name}`}
-                                        className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 hover:text-red-800"
-                                    >
-                                        Remove
-                                    </button>
-                                </li>
+                                    photo={photo}
+                                    onRemove={removePhoto}
+                                />
                             ))}
                         </ul>
                     )}

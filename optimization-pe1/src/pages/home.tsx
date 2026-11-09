@@ -6,7 +6,7 @@ export default function Home() {
   const PhotoCollection = lazy(
   () => import("@/components/photoCollection")
 );
-  // delayed banner
+  //delayed banner
 
   const [showBanner, setShowBanner] = useState(false);
 
