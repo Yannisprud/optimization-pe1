@@ -82,6 +82,7 @@ export default function PhotoCollection() {
                                         alt={photo.name}
                                         width="80"
                                         height="80"
+                                        loading="lazy"
                                         className="h-16 w-16 shrink-0 rounded-lg object-cover"
                                     />
 

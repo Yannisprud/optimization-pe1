@@ -1,13 +1,12 @@
-import { useEffect, useState, lazy, Suspense } from "react";
 import NavBar from "@/components/navbar";
-
-const PhotoCollection = lazy(
-  () => import("@/components/photoCollection")
-);
+import { lazy, useEffect, useState, Suspense} from "react";
 
 export default function Home() {
 
-  //delayed banner
+  const PhotoCollection = lazy(
+  () => import("@/components/photoCollection")
+);
+  // delayed banner
 
   const [showBanner, setShowBanner] = useState(false);
 
@@ -32,15 +31,17 @@ export default function Home() {
       </header>
       <main className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-10 sm:py-14">
         {/*delayed banner*/}
+        <div className= "mb-6 min-h-20 w-full">
         {showBanner && (
-          <div className="mb-6 w-full rounded-xl bg-amber-100 p-4 text-center text-amber-900 shadow-sm">
+          <div className="rounded-xl bg-amber-100 p-4 text-center text-amber-900 shadow-sm">
             <p className="font-semibold">Welcome to Fotograph!</p>
             <p className="text-sm">
               Explore my gallery and discover the photographs.
             </p>
           </div>
-        )}
-        {/**/}
+        )} 
+        </div>
+        
         <p className="text-3xl mb-9 font-semibold uppercase tracking-[0.2em] text-amber-700">
           The gallery
         </p>
@@ -86,7 +87,7 @@ export default function Home() {
             <Suspense fallback={<p>Loading photo collection...</p>}>
               <PhotoCollection />
             </Suspense>
-          )}
+          )} 
         </section>
       </main>
     </div>
