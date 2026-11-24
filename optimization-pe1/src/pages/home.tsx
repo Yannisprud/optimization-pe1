@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import SiteLayout from "@/components/siteLayout";
+import { usePhotoStore } from "@/components/photoStore";
 
 const Carousel = lazy(() => import("@/components/carousel"));
 
-const previewPhotos = [
-  { src: "/images/D71_6964.JPG", name: "D71_6964.JPG" },
-  { src: "/images/D71_6983.JPG", name: "D71_6983.JPG" },
-  { src: "/images/D71_7063.JPG", name: "D71_7063.JPG" },
-];
-
 export default function Home() {
+  const [photos] = usePhotoStore();
+
   return (
     <SiteLayout>
       <main className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8">
@@ -43,7 +40,7 @@ export default function Home() {
             </Link>
           </div>
           <Suspense fallback={<div className="py-8 text-sm text-stone-500">Loading preview…</div>}>
-            <Carousel photos={previewPhotos} />
+            <Carousel photos={photos} />
           </Suspense>
         </section>
       </main>

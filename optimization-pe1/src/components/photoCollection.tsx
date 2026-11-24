@@ -1,24 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import PhotoCard from "@/Cards/PhotoCard";
-
-export type Photo = {
-    src: string;
-    name: string;
-    type?: string;
-    dateAdded: number;
-    isObjectUrl?: boolean;
-};
+import { usePhotoStore, type Photo } from "./photoStore";
 
 type SortOrder = "newest" | "oldest" | "name-asc" | "name-desc";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const SUPPORTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
-
-const initialPhotos: Photo[] = [
-    { src: "/images/D71_6964.JPG", name: "D71_6964.JPG", type: "image/jpeg", dateAdded: 3 },
-    { src: "/images/D71_6983.JPG", name: "D71_6983.JPG", type: "image/jpeg", dateAdded: 2 },
-    { src: "/images/D71_7063.JPG", name: "D71_7063.JPG", type: "image/jpeg", dateAdded: 1 },
-];
 
 function validateFile(file: File): string | undefined {
     if (!SUPPORTED_TYPES.has(file.type.toLowerCase())) {
@@ -31,7 +18,7 @@ function validateFile(file: File): string | undefined {
 }
 
 export default function PhotoCollection() {
-    const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
+    const [photos, setPhotos] = usePhotoStore();
     const [query, setQuery] = useState("");
     const [typeFilter, setTypeFilter] = useState("all");
     const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
@@ -50,41 +37,43 @@ export default function PhotoCollection() {
             });
     }, [photos, query, typeFilter, sortOrder]);
 
-    useEffect(() => () => {
-        photos.filter((photo) => photo.isObjectUrl).forEach((photo) => URL.revokeObjectURL(photo.src));
-    }, [photos]);
-
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const files = Array.from(event.target.files || []);
         const errors: string[] = [];
-        const accepted: Photo[] = [];
+        const acceptedFiles: File[] = [];
 
         files.forEach((file) => {
             const reason = validateFile(file);
             if (reason) {
                 errors.push(`${file.name} ${reason}`);
             } else {
-                accepted.push({
-                    src: URL.createObjectURL(file),
-                    name: file.name,
-                    type: file.type.toLowerCase(),
-                    dateAdded: Date.now() + accepted.length,
-                    isObjectUrl: true,
-                });
+                acceptedFiles.push(file);
             }
         });
 
-        if (accepted.length) setPhotos((current) => [...current, ...accepted]);
+        // Data URLs persist in local storage, unlike temporary object URLs.
+        Promise.all(acceptedFiles.map((file) => new Promise<Photo>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({
+                src: String(reader.result),
+                name: file.name,
+                type: file.type.toLowerCase(),
+                dateAdded: Date.now(),
+            });
+            reader.onerror = () => reject(new Error(`Could not read ${file.name}.`));
+            reader.readAsDataURL(file);
+        }))).then((accepted) => {
+            if (accepted.length) setPhotos((current) => [...current, ...accepted]);
+        }).catch((error: unknown) => {
+            setUploadErrors((current) => [...current, error instanceof Error ? error.message : "A photo could not be read."]);
+        });
+
         setUploadErrors(errors);
         event.target.value = "";
     }
 
     const removePhoto = useCallback((src: string) => {
-        setPhotos((current) => {
-            const removed = current.find((photo) => photo.src === src);
-            if (removed?.isObjectUrl) URL.revokeObjectURL(removed.src);
-            return current.filter((photo) => photo.src !== src);
-        });
+        setPhotos((current) => current.filter((photo) => photo.src !== src));
         setSelectedPhoto((current) => current?.src === src ? null : current);
     }, []);
 
