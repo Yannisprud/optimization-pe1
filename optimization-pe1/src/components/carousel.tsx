@@ -24,14 +24,14 @@ export default function Carousel({ photos }: CarouselProps) {
   };
 
   return (
-    <section aria-label="Photo preview" className="mx-auto w-full py-5 sm:py-7">
+    <section aria-label="Photo preview" className="mx-auto w-full max-w-4xl py-5 sm:py-7">
       <div className="relative overflow-hidden rounded-xl bg-gray-200">
         <img
           src={photos[safeCurrent].src}
           alt={photos[safeCurrent].name}
           width="1200"
           height="800"
-          className="aspect-[16/8] w-full object-cover sm:aspect-[16/7]"
+          className="aspect-[3/2] w-full object-cover"
         />
 
         <div className="absolute bottom-4 left-4 rounded bg-black/60 px-3 py-1.5 text-sm text-white">

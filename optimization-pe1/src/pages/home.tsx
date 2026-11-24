@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import SiteLayout from "@/components/siteLayout";
 import { usePhotoStore } from "@/components/photoStore";
 
@@ -7,6 +7,9 @@ const Carousel = lazy(() => import("@/components/carousel"));
 
 export default function Home() {
   const [photos] = usePhotoStore();
+  const previewPhotos = useMemo(() => [...photos]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3), [photos]);
 
   return (
     <SiteLayout>
@@ -40,7 +43,7 @@ export default function Home() {
             </Link>
           </div>
           <Suspense fallback={<div className="py-8 text-sm text-stone-500">Loading preview…</div>}>
-            <Carousel photos={photos} />
+            <Carousel photos={previewPhotos} />
           </Suspense>
         </section>
       </main>
