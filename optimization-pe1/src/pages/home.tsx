@@ -1,97 +1,52 @@
-import NavBar from "@/components/navbar";
-import { lazy, useEffect, useState, Suspense} from "react";
+import { Link } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import SiteLayout from "@/components/siteLayout";
+
+const Carousel = lazy(() => import("@/components/carousel"));
+
+const previewPhotos = [
+  { src: "/images/D71_6964.JPG", name: "D71_6964.JPG" },
+  { src: "/images/D71_6983.JPG", name: "D71_6983.JPG" },
+  { src: "/images/D71_7063.JPG", name: "D71_7063.JPG" },
+];
 
 export default function Home() {
-
-  const PhotoCollection = lazy(
-  () => import("@/components/photoCollection")
-);
-  //delayed banner
-
-  const [showBanner, setShowBanner] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowBanner(true);
-    }, 2000);
-    //;
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const [showCollection, setShowCollection] = useState(false);
-
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900">
-      <header className="sticky top-0 z-50 bg-amber-700 text-white shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <a href="/home" className="text-3xl font-bold">Fotograph</a>
-          <NavBar />
-        </div>
-      </header>
-      <main className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-10 sm:py-14">
-        {/*delayed banner*/}
-        <div className= "mb-6 min-h-20 w-full">
-        {showBanner && (
-          <div className="rounded-xl bg-amber-100 p-4 text-center text-amber-900 shadow-sm">
-            <p className="font-semibold">Welcome to Fotograph!</p>
-            <p className="text-sm">
-              Explore my gallery and discover the photographs.
-            </p>
+    <SiteLayout>
+      <main className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8">
+        <section className="grid items-center gap-8 py-10 sm:py-14 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">Photo library</h1>
+            <p className="mt-4 max-w-md leading-7 text-stone-600">Store and organize your pictures in one place.</p>
           </div>
-        )} 
-        </div>
-        
-        <p className="text-3xl mb-9 font-semibold uppercase tracking-[0.2em] text-amber-700">
-          The gallery
-        </p>
-        <img
-          src="/images/D71_6978.JPG"
-          alt="River"
-          fetchPriority="high"
-          width="600"
-          height="400"
-          className="mb-4 h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
-        />
-        <img
-          src="/images/D71_7063.JPG"
-          alt="Bird"
-          width="600"
-          height="400"
-          className="h-auto w-full max-w-2xl rounded-2xl object-cover shadow-sm"
-        />
-        <section className="mt-8 w-full max-w-4xl">
-
-          <p className="mt-3 text-base leading-7 text-stone-600">
-            <span className="font-semibold text-stone-800">
-              Tech used:
-            </span>{" "}
-            Nikon D7100 DSLR · Macro / Standard lens
-          </p>
+          <div>
+            <img
+              src="/images/D71_6978.JPG"
+              alt="River landscape"
+              fetchPriority="high"
+              width="1200"
+              height="800"
+              className="aspect-[4/3] w-full rounded-lg object-cover"
+            />
+            <p className="mt-3 text-sm text-stone-500">Tech used: Nikon D7100 DSLR · Macro / Standard lens</p>
+          </div>
         </section>
 
-        <hr className="my-6 w-screen border-t border-gray-300" />
-        {/* Spacer to push the carousel below the fold for LCP testing */}
-        <div className="h-32 w-full basis-full" aria-hidden="true" />
-
-        <section className="w-full">
-          <div className="mx-auto mb-2 max-w-4xl px-6">
+        <section aria-labelledby="preview-heading" className="border-t border-stone-200 pt-7">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <h2 id="preview-heading" className="text-2xl font-semibold">Photo preview</h2>
+              <p className="mt-1 text-sm text-stone-500">A few photos from the library.</p>
+            </div>
+            <Link to="/library" className="w-fit rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-stone-700">
+              Go to library
+            </Link>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowCollection(true)}
-            className="rounded-lg bg-amber-700 px-5 py-3 text-white hover:bg-amber-800"
-          >
-            Open photo collection
-          </button>
-
-          {showCollection && (
-            <Suspense fallback={<p>Loading photo collection...</p>}>
-              <PhotoCollection />
-            </Suspense>
-          )} 
+          <Suspense fallback={<div className="py-8 text-sm text-stone-500">Loading preview…</div>}>
+            <Carousel photos={previewPhotos} />
+          </Suspense>
         </section>
       </main>
-    </div>
+    </SiteLayout>
   );
 }
